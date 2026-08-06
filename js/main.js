@@ -3,6 +3,34 @@
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- Theme toggle (light/dark) ---------- */
+  const themeToggle = document.getElementById('themeToggle');
+  const themeToggleMobile = document.getElementById('themeToggleMobile');
+  const themeToggleLabel = document.getElementById('themeToggleLabel');
+  const htmlEl = document.documentElement;
+
+  const applyThemeUI = (theme) => {
+    const isDark = theme === 'dark';
+    if (themeToggle) themeToggle.setAttribute('aria-pressed', String(isDark));
+    if (themeToggleMobile) themeToggleMobile.setAttribute('aria-pressed', String(isDark));
+    if (themeToggleLabel) themeToggleLabel.textContent = isDark ? 'Tema claro' : 'Tema escuro';
+  };
+
+  const setTheme = (theme) => {
+    htmlEl.setAttribute('data-theme', theme);
+    localStorage.setItem('pels-theme', theme);
+    applyThemeUI(theme);
+  };
+
+  const toggleTheme = () => {
+    const current = htmlEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    setTheme(current === 'dark' ? 'light' : 'dark');
+  };
+
+  applyThemeUI(htmlEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+  if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+
   /* ---------- Header shrink on scroll + scroll progress ---------- */
   const header = document.getElementById('siteHeader');
   const progress = document.getElementById('scrollProgress');
@@ -23,6 +51,9 @@
   backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   });
+
+  /* Note: the 3D hero mark itself (extruded from the vector logo, auto-spin,
+     drag-to-rotate, scroll acceleration) is handled by js/logo3d.js. */
 
   /* ---------- Mobile nav ---------- */
   const navToggle = document.getElementById('navToggle');
@@ -134,6 +165,17 @@
   /* ---------- Footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  /* ---------- Footer last-updated (from file's real mtime, no fake date) ---------- */
+  const lastUpdatedEl = document.getElementById('lastUpdated');
+  if (lastUpdatedEl) {
+    const mtime = new Date(document.lastModified);
+    if (!isNaN(mtime)) {
+      lastUpdatedEl.textContent = mtime.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    } else {
+      lastUpdatedEl.closest('.footer-updated')?.remove();
+    }
+  }
+
   /* ---------- Ripple on every button click ---------- */
   const rippleTargets = document.querySelectorAll('.btn, .filter-btn, .nav-toggle, .back-to-top, .gallery-item');
 
@@ -198,7 +240,9 @@
   const heroSection = document.querySelector('.hero');
   const heroCopy = document.querySelector('.hero-copy');
 
-  if (!reduceMotion && heroVisual) {
+  const cinematicHero = !reduceMotion && heroVisual && window.matchMedia('(min-width: 761px)').matches;
+
+  if (cinematicHero) {
     let heroTiltX = 0;
     let heroTiltY = 0;
     const heroHeight = () => heroSection.offsetHeight || window.innerHeight;
@@ -239,13 +283,18 @@
         applyHeroTransform();
       });
     }
+  } else if (heroVisual) {
+    heroVisual.style.transform = '';
+    heroVisual.style.opacity = '1';
+    if (glowRing) { glowRing.style.transform = ''; glowRing.style.opacity = ''; }
+    if (heroCopy) { heroCopy.style.transform = ''; heroCopy.style.opacity = '1'; }
   }
 
   /* ---------- Cinematic pinned stats (Star Atlas-style scroll scene) ---------- */
   const pinWrap = document.getElementById('pinWrap');
   const cineStats = document.querySelectorAll('.stat-cine');
 
-  if (!reduceMotion && pinWrap && cineStats.length) {
+  if (!reduceMotion && window.matchMedia('(min-width: 761px)').matches && pinWrap && cineStats.length) {
     const updatePin = () => {
       const rect = pinWrap.getBoundingClientRect();
       const total = rect.height - window.innerHeight;
@@ -269,9 +318,14 @@
   if (galleryItems.length && lightbox) {
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxFocusable = lightbox.querySelectorAll('button');
     let currentIndex = 0;
+    let lastFocused = null;
 
     const openLightbox = (index) => {
+      const isFirstOpen = !lightbox.classList.contains('is-open');
+      if (isFirstOpen) lastFocused = document.activeElement;
       currentIndex = (index + galleryItems.length) % galleryItems.length;
       const item = galleryItems[currentIndex];
       const img = item.querySelector('img');
@@ -281,19 +335,27 @@
       lightbox.classList.add('is-open');
       lightbox.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      if (isFirstOpen) setTimeout(() => lightboxClose.focus(), 0);
     };
 
     const closeLightbox = () => {
       lightbox.classList.remove('is-open');
       lightbox.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
     };
 
     galleryItems.forEach((item, index) => {
       item.addEventListener('click', () => openLightbox(index));
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox(index);
+        }
+      });
     });
 
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
     document.getElementById('lightboxPrev').addEventListener('click', () => openLightbox(currentIndex - 1));
     document.getElementById('lightboxNext').addEventListener('click', () => openLightbox(currentIndex + 1));
 
@@ -306,7 +368,27 @@
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') openLightbox(currentIndex + 1);
       if (e.key === 'ArrowLeft') openLightbox(currentIndex - 1);
+      if (e.key === 'Tab') {
+        const focusables = Array.from(lightboxFocusable);
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     });
   }
+
+  /* ---------- Retratos da diretoria ---------- */
+  document.querySelectorAll('.member-photo img').forEach((image) => {
+    const portrait = image.closest('.member-photo');
+    const revealPortrait = () => portrait.classList.add('has-photo');
+    if (image.complete && image.naturalWidth > 0) revealPortrait();
+    else image.addEventListener('load', revealPortrait, { once: true });
+  });
 
 })();
