@@ -18,6 +18,9 @@
     var stored = localStorage.getItem('pels-theme');
     var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
+
+    var storedLang = localStorage.getItem('pels-lang');
+    if (storedLang === 'en') document.documentElement.setAttribute('lang', 'en');
   })();
 </script>
 </head>
@@ -37,22 +40,28 @@
     </a>
 
     <nav class="nav-desktop" aria-label="Navegação principal">
-      <a href="../index.html#inicio">Início</a>
-      <a href="../index.html#sobre">Sobre</a>
-      <a href="../index.html#diretoria">Diretoria</a>
-      <a href="../index.html#oportunidades">Oportunidades</a>
-      <a href="../index.html#projetos">Projetos &amp; Eventos</a>
-      <a href="../index.html#loja">Lojinha</a>
-      <a href="../index.html#galeria">Galeria</a>
-      <a href="../index.html#contato">Contato</a>
+      <a href="../index.html#inicio"><span class="i18n-pt">Início</span><span class="i18n-en" lang="en">Home</span></a>
+      <a href="../index.html#sobre"><span class="i18n-pt">Sobre</span><span class="i18n-en" lang="en">About</span></a>
+      <a href="../index.html#diretoria"><span class="i18n-pt">Diretoria</span><span class="i18n-en" lang="en">Board</span></a>
+      <a href="../index.html#oportunidades"><span class="i18n-pt">Oportunidades</span><span class="i18n-en" lang="en">Opportunities</span></a>
+      <a href="../index.html#projetos"><span class="i18n-pt">Projetos &amp; Eventos</span><span class="i18n-en" lang="en">Projects &amp; Events</span></a>
+      <a href="../index.html#loja"><span class="i18n-pt">Lojinha</span><span class="i18n-en" lang="en">Shop</span></a>
+      <a href="../index.html#galeria"><span class="i18n-pt">Galeria</span><span class="i18n-en" lang="en">Gallery</span></a>
+      <a href="../index.html#contato"><span class="i18n-pt">Contato</span><span class="i18n-en" lang="en">Contact</span></a>
     </nav>
+
+    <div class="lang-toggle" role="group" aria-label="Idioma do site / Site language">
+      <span class="lang-toggle-icon" aria-hidden="true">🌐</span>
+      <button type="button" class="lang-btn" data-lang-btn="pt" aria-pressed="true">PT</button>
+      <button type="button" class="lang-btn" data-lang-btn="en" aria-pressed="false">EN</button>
+    </div>
 
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" aria-pressed="false">
       <span class="theme-icon theme-icon-sun" aria-hidden="true">☀️</span>
       <span class="theme-icon theme-icon-moon" aria-hidden="true">🌙</span>
     </button>
 
-    <a href="../index.html#membros" class="btn btn-outline">Torne-se membro</a>
+    <a href="../index.html#membros" class="btn btn-outline"><span class="i18n-pt">Torne-se membro</span><span class="i18n-en" lang="en">Become a member</span></a>
 
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navMobile">
       <span></span>
@@ -61,15 +70,20 @@
 </header>
 
 <nav class="nav-mobile" id="navMobile" aria-label="Navegação mobile">
-  <a href="../index.html#inicio">Início</a>
-  <a href="../index.html#sobre">Sobre</a>
-  <a href="../index.html#diretoria">Diretoria</a>
-  <a href="../index.html#oportunidades">Oportunidades</a>
-  <a href="../index.html#projetos">Projetos &amp; Eventos</a>
-  <a href="../index.html#loja">Lojinha</a>
-  <a href="../index.html#galeria">Galeria</a>
-  <a href="../index.html#contato">Contato</a>
-  <a href="../index.html#membros" class="btn btn-primary">Torne-se membro</a>
+  <a href="../index.html#inicio"><span class="i18n-pt">Início</span><span class="i18n-en" lang="en">Home</span></a>
+  <a href="../index.html#sobre"><span class="i18n-pt">Sobre</span><span class="i18n-en" lang="en">About</span></a>
+  <a href="../index.html#diretoria"><span class="i18n-pt">Diretoria</span><span class="i18n-en" lang="en">Board</span></a>
+  <a href="../index.html#oportunidades"><span class="i18n-pt">Oportunidades</span><span class="i18n-en" lang="en">Opportunities</span></a>
+  <a href="../index.html#projetos"><span class="i18n-pt">Projetos &amp; Eventos</span><span class="i18n-en" lang="en">Projects &amp; Events</span></a>
+  <a href="../index.html#loja"><span class="i18n-pt">Lojinha</span><span class="i18n-en" lang="en">Shop</span></a>
+  <a href="../index.html#galeria"><span class="i18n-pt">Galeria</span><span class="i18n-en" lang="en">Gallery</span></a>
+  <a href="../index.html#contato"><span class="i18n-pt">Contato</span><span class="i18n-en" lang="en">Contact</span></a>
+  <a href="../index.html#membros" class="btn btn-primary"><span class="i18n-pt">Torne-se membro</span><span class="i18n-en" lang="en">Become a member</span></a>
+  <div class="lang-toggle lang-toggle-mobile" role="group" aria-label="Idioma do site / Site language">
+    <span class="lang-toggle-icon" aria-hidden="true">🌐</span>
+    <button type="button" class="lang-btn" data-lang-btn="pt" aria-pressed="true">PT</button>
+    <button type="button" class="lang-btn" data-lang-btn="en" aria-pressed="false">EN</button>
+  </div>
   <button class="theme-toggle theme-toggle-mobile" id="themeToggleMobile" type="button" aria-label="Alternar tema claro/escuro" aria-pressed="false">
     <span class="theme-icon theme-icon-sun" aria-hidden="true">☀️</span>
     <span class="theme-icon theme-icon-moon" aria-hidden="true">🌙</span>
@@ -81,7 +95,7 @@
 
   <section class="page-hero">
     <div class="container">
-      <a href="../index.html#projetos" class="page-back">← Voltar para Projetos &amp; Eventos</a>
+      <a href="../index.html#projetos" class="page-back"><span class="i18n-pt">← Voltar para Projetos &amp; Eventos</span><span class="i18n-en" lang="en">← Back to Projects &amp; Events</span></a>
       <span class="kicker">Projeto · Contínuo</span>
       <h1 lang="en">Paper Club</h1>
       <p class="page-lead" lang="en">Leia · Entenda · Discuta · Aprenda.</p>
@@ -156,8 +170,10 @@
         <img src="../assets/img/logo.png" alt="Logo IEEE PELS UFMS">
         <strong>IEEE PELS UFMS Chapter</strong>
       </div>
-      <p>Capítulo Estudantil IEEE Power Electronics Society da Universidade Federal de Mato Grosso do
+      <p class="i18n-pt">Capítulo Estudantil IEEE Power Electronics Society da Universidade Federal de Mato Grosso do
         Sul. Vinculado ao Ramo Estudantil IEEE UFMS.</p>
+      <p class="i18n-en" lang="en">IEEE Power Electronics Society Student Chapter at the Federal University of
+        Mato Grosso do Sul. Affiliated with the IEEE UFMS Student Branch.</p>
       <div class="social-row">
         <a href="https://www.instagram.com/pels_ufms/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
         <a href="https://youtube.com/@pelsufms8757" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21 12c0 3.5-.4 5.7-1.1 6.7-.7.9-2.2 1.3-4.8 1.3H8.9c-2.6 0-4.1-.4-4.8-1.3C3.4 17.7 3 15.5 3 12s.4-5.7 1.1-6.7C4.8 4.4 6.3 4 8.9 4h6.2c2.6 0 4.1.4 4.8 1.3.7 1 1.1 3.2 1.1 6.7Z"/><path d="m10 8.8 5.3 3.2-5.3 3.2Z" class="fill"/></svg></a>
@@ -167,23 +183,23 @@
     </div>
 
     <div class="footer-col">
-      <h4>Navegação</h4>
+      <h4><span class="i18n-pt">Navegação</span><span class="i18n-en" lang="en">Navigation</span></h4>
       <ul>
-        <li><a href="../index.html#sobre">Sobre</a></li>
-        <li><a href="../index.html#diretoria">Diretoria</a></li>
-        <li><a href="../index.html#oportunidades">Oportunidades</a></li>
-        <li><a href="../index.html#projetos">Projetos &amp; Eventos</a></li>
-        <li><a href="../index.html#loja">Lojinha</a></li>
-        <li><a href="../index.html#galeria">Galeria</a></li>
+        <li><a href="../index.html#sobre"><span class="i18n-pt">Sobre</span><span class="i18n-en" lang="en">About</span></a></li>
+        <li><a href="../index.html#diretoria"><span class="i18n-pt">Diretoria</span><span class="i18n-en" lang="en">Board</span></a></li>
+        <li><a href="../index.html#oportunidades"><span class="i18n-pt">Oportunidades</span><span class="i18n-en" lang="en">Opportunities</span></a></li>
+        <li><a href="../index.html#projetos"><span class="i18n-pt">Projetos &amp; Eventos</span><span class="i18n-en" lang="en">Projects &amp; Events</span></a></li>
+        <li><a href="../index.html#loja"><span class="i18n-pt">Lojinha</span><span class="i18n-en" lang="en">Shop</span></a></li>
+        <li><a href="../index.html#galeria"><span class="i18n-pt">Galeria</span><span class="i18n-en" lang="en">Gallery</span></a></li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h4>Capítulo</h4>
+      <h4><span class="i18n-pt">Capítulo</span><span class="i18n-en" lang="en">Chapter</span></h4>
       <ul>
-        <li><a href="../index.html#membros">Torne-se membro</a></li>
-        <li><a href="../index.html#contato">Contato</a></li>
-        <li><a href="https://www.ieee-pels.org" target="_blank" rel="noopener">IEEE PELS Internacional</a></li>
+        <li><a href="../index.html#membros"><span class="i18n-pt">Torne-se membro</span><span class="i18n-en" lang="en">Become a member</span></a></li>
+        <li><a href="../index.html#contato"><span class="i18n-pt">Contato</span><span class="i18n-en" lang="en">Contact</span></a></li>
+        <li><a href="https://www.ieee-pels.org" target="_blank" rel="noopener"><span class="i18n-pt">IEEE PELS Internacional</span><span class="i18n-en" lang="en">IEEE PELS International</span></a></li>
       </ul>
     </div>
 
@@ -197,13 +213,14 @@
   </div>
 
   <div class="container footer-bottom">
-    <span>© <span id="year"></span> IEEE PELS UFMS Chapter. Site estudantil, sem fins lucrativos.</span>
-    <span class="footer-updated">Última atualização em <span id="lastUpdated">—</span></span>
+    <span><span class="i18n-pt">© <span id="year"></span> IEEE PELS UFMS Chapter. Site estudantil, sem fins lucrativos.</span><span class="i18n-en" lang="en">© <span id="yearEn"></span> IEEE PELS UFMS Chapter. Student-run, non-profit website.</span></span>
+    <span class="footer-updated"><span class="i18n-pt">Última atualização em <span id="lastUpdated">—</span></span><span class="i18n-en" lang="en">Last updated on <span id="lastUpdatedEn">—</span></span></span>
   </div>
 </footer>
 
 <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">↑</button>
 
+<script src="../js/i18n.js"></script>
 <script src="../js/main.js"></script>
 </body>
 </html>

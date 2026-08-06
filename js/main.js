@@ -11,10 +11,18 @@
 
   const applyThemeUI = (theme) => {
     const isDark = theme === 'dark';
+    const isEn = htmlEl.getAttribute('lang') === 'en';
     if (themeToggle) themeToggle.setAttribute('aria-pressed', String(isDark));
     if (themeToggleMobile) themeToggleMobile.setAttribute('aria-pressed', String(isDark));
-    if (themeToggleLabel) themeToggleLabel.textContent = isDark ? 'Tema claro' : 'Tema escuro';
+    if (themeToggleLabel) {
+      themeToggleLabel.textContent = isEn
+        ? (isDark ? 'Light theme' : 'Dark theme')
+        : (isDark ? 'Tema claro' : 'Tema escuro');
+    }
   };
+  document.addEventListener('pelslangchange', () => {
+    applyThemeUI(htmlEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  });
 
   const setTheme = (theme) => {
     htmlEl.setAttribute('data-theme', theme);
@@ -163,17 +171,18 @@
   });
 
   /* ---------- Footer year ---------- */
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const year = new Date().getFullYear();
+  document.querySelectorAll('#year, #yearEn').forEach((el) => { el.textContent = year; });
 
   /* ---------- Footer last-updated (from file's real mtime, no fake date) ---------- */
-  const lastUpdatedEl = document.getElementById('lastUpdated');
-  if (lastUpdatedEl) {
-    const mtime = new Date(document.lastModified);
-    if (!isNaN(mtime)) {
-      lastUpdatedEl.textContent = mtime.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-    } else {
-      lastUpdatedEl.closest('.footer-updated')?.remove();
-    }
+  const mtime = new Date(document.lastModified);
+  if (!isNaN(mtime)) {
+    const ptEl = document.getElementById('lastUpdated');
+    const enEl = document.getElementById('lastUpdatedEn');
+    if (ptEl) ptEl.textContent = mtime.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    if (enEl) enEl.textContent = mtime.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
+  } else {
+    document.querySelectorAll('.footer-updated').forEach((el) => el.remove());
   }
 
   /* ---------- Ripple on every button click ---------- */

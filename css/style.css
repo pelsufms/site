@@ -244,6 +244,40 @@ html[data-theme="dark"] .theme-icon-moon { display: inline; }
   color: var(--ink);
 }
 
+/* ---------- Language toggle ---------- */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 6px 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.lang-toggle-icon { font-size: 1rem; line-height: 1; }
+.lang-btn {
+  border: none;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-btn:hover { color: var(--ink); }
+.lang-btn.is-active { background: var(--red); color: #fff; }
+.lang-toggle-mobile {
+  width: auto;
+  align-self: flex-start;
+  margin-top: 14px;
+  height: auto;
+  padding: 8px 8px 8px 14px;
+}
+
 .nav-toggle {
   display: none;
   background: none; border: none;
@@ -1497,3 +1531,10 @@ section { padding: 108px 0; perspective: 1200px; }
 @media (max-width: 640px) {
   .page-hero { padding: 140px 0 48px; }
 }
+
+/* ---------- i18n (PT-BR / EN content toggle) ----------
+   Higher-specificity hide rules only — never force a "shown" display value,
+   so elements keep whatever display their own component class needs
+   (flex, inline-flex, grid, list-item, etc). */
+html:not([lang="en"]) .i18n-en { display: none; }
+html[lang="en"] .i18n-pt { display: none; }
